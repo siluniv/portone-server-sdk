@@ -1,8 +1,8 @@
 {
-  "name": "@portone/server-sdk",
+  "name": "@siluniv/portone-server-sdk",
   "type": "module",
-  "version": "0.18.0",
-  "description": "PortOne JavaScript SDK for server-side usage",
+  "version": "0.1.0",
+  "description": "Fork of PortOne JavaScript SDK for server-side usage (adds Idempotency-Key support)",
   "keywords": [
     "PortOne",
     "payment",
@@ -10,13 +10,16 @@
     "결제 연동"
   ],
   "author": {
-    "name": "portone-dx",
-    "email": "support@portone.io"
+    "name": "siluniv"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/portone-io/server-sdk.git",
+    "url": "git+https://github.com/siluniv/portone-server-sdk.git",
     "directory": "javascript"
+  },
+  "homepage": "https://github.com/siluniv/portone-server-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/siluniv/portone-server-sdk/issues"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -48,6 +51,7 @@
     "./platform/transfer": "./src/generated/platform/transfer/index.ts"
   },
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
@@ -176,7 +180,7 @@
     "build": "unbuild",
     "test:dev": "vitest --ui --typecheck",
     "test": "vitest run --typecheck",
-    "prepublish": "git tag \"js-v$(jq -r .version package.json)\" && git push --tags && pnpm build && sed -i \"s/VERSION_PLACEHOLDER/$(jq -r .version package.json)/\" jsr.json",
+    "prepublishOnly": "npm run build",
     "publish": "jsr publish --allow-dirty"
   },
   "devDependencies": {
