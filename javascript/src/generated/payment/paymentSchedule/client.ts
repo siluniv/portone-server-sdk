@@ -1,6 +1,7 @@
 import { PaymentScheduleError } from "./PaymentScheduleError"
 import type { Unrecognized } from "./../../../utils/unrecognized"
 import { USER_AGENT, type PortOneClientInit } from "../../../client"
+import { idempotencyKeyHeader } from "../../../utils/idempotency"
 import type { AlreadyPaidOrWaitingError } from "../../../generated/payment/paymentSchedule/AlreadyPaidOrWaitingError"
 import type { BillingKeyAlreadyDeletedError } from "../../../generated/common/BillingKeyAlreadyDeletedError"
 import type { BillingKeyNotFoundError } from "../../../generated/common/BillingKeyNotFoundError"
@@ -132,7 +133,8 @@ export function PaymentScheduleClient(init: PortOneClientInit): PaymentScheduleC
 				paymentId: string,
 				payment: BillingKeyPaymentInput,
 				timeToPay: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<CreatePaymentScheduleResponse> => {
 			const {
 				paymentId,
@@ -150,6 +152,7 @@ export function PaymentScheduleClient(init: PortOneClientInit): PaymentScheduleC
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -251,7 +254,13 @@ export type PaymentScheduleClient = {
 			 * (RFC 3339 date-time)
 			 */
 			timeToPay: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<CreatePaymentScheduleResponse>
 }
 export class GetPaymentScheduleError extends PaymentScheduleError {

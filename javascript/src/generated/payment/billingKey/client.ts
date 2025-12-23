@@ -1,6 +1,7 @@
 import { BillingKeyError } from "./BillingKeyError"
 import type { Unrecognized } from "./../../../utils/unrecognized"
 import { USER_AGENT, type PortOneClientInit } from "../../../client"
+import { idempotencyKeyHeader } from "../../../utils/idempotency"
 import type { BillingKeyAlreadyDeletedError } from "../../../generated/common/BillingKeyAlreadyDeletedError"
 import type { BillingKeyAlreadyIssuedError } from "../../../generated/payment/billingKey/BillingKeyAlreadyIssuedError"
 import type { BillingKeyDeleteRequester } from "../../../generated/payment/billingKey/BillingKeyDeleteRequester"
@@ -78,7 +79,8 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 				customData?: string,
 				bypass?: object,
 				noticeUrls?: string[],
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<IssueBillingKeyResponse> => {
 			const {
 				storeId,
@@ -107,6 +109,7 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -121,7 +124,8 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 				storeId?: string,
 				billingIssueToken: string,
 				isTest?: boolean,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ConfirmedBillingKeySummary> => {
 			const {
 				storeId,
@@ -140,6 +144,7 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -158,7 +163,8 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 				totalAmount?: number,
 				taxFreeAmount?: number,
 				isTest?: boolean,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ConfirmedBillingKeyIssueAndPaySummary> => {
 			const {
 				storeId,
@@ -185,6 +191,7 @@ export function BillingKeyClient(init: PortOneClientInit): BillingKeyClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -336,6 +343,16 @@ export type BillingKeyClient = {
 			 */
 			noticeUrls?: string[],
 		}
+		,
+		/**
+		 * 멱등 키
+		 *
+		 * 네트워크 장애/타임아웃 등으로 동일 요청이 중복 처리되는 것을 방지하기 위한 키입니다.
+		 * RFC 8941에 따라 문자열은 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 *
+		 * 참고: https://developers.portone.io/api/rest-v2?v=v2
+		 */
+		idempotencyKey?: string
 	) => Promise<IssueBillingKeyResponse>
 	/**
 	 * 빌링키 발급 수동 승인
@@ -364,7 +381,13 @@ export type BillingKeyClient = {
 			 * 검증용 파라미터로, 결제 건 테스트 여부와 일치하지 않을 경우 오류가 반환됩니다.
 			 */
 			isTest?: boolean,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ConfirmedBillingKeySummary>
 	/**
 	 * 빌링키 발급 및 초회 결제 수동 승인
@@ -419,7 +442,13 @@ export type BillingKeyClient = {
 			 * 검증용 파라미터로, 결제 건 테스트 여부와 일치하지 않을 경우 오류가 반환됩니다.
 			 */
 			isTest?: boolean,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ConfirmedBillingKeyIssueAndPaySummary>
 	/**
 	 * 빌링키 단건 조회

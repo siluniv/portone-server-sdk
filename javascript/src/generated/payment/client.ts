@@ -1,5 +1,6 @@
 import { PaymentError } from "./PaymentError"
 import type { Unrecognized } from "./../../utils/unrecognized"
+import { idempotencyKeyHeader } from "../../utils/idempotency"
 import { USER_AGENT, type PortOneClientInit } from "../../client"
 import { BillingKeyClient } from "./billingKey/client"
 import { CashReceiptClient } from "./cashReceipt/client"
@@ -182,7 +183,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				promotionId?: string,
 				locale?: Locale,
 				bypass?: object,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<PayWithBillingKeyResponse> => {
 			const {
 				paymentId,
@@ -238,6 +240,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -259,7 +262,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				promotionDiscountRetainOption?: PromotionDiscountRetainOption,
 				currentCancellableAmount?: number,
 				refundAccount?: CancelPaymentBodyRefundAccount,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<CancelPaymentResponse> => {
 			const {
 				paymentId,
@@ -291,6 +295,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -304,7 +309,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 			options: {
 				paymentId: string,
 				storeId?: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<CapturePaymentResponse> => {
 			const {
 				paymentId,
@@ -320,6 +326,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -339,7 +346,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				totalAmount?: number,
 				taxFreeAmount?: number,
 				isTest?: boolean,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ConfirmedPaymentSummary> => {
 			const {
 				paymentId,
@@ -367,6 +375,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -381,7 +390,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				paymentId: string,
 				storeId?: string,
 				fromStore?: boolean,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ConfirmEscrowResponse> => {
 			const {
 				paymentId,
@@ -399,6 +409,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -417,7 +428,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				logistics: PaymentLogistics,
 				sendEmail?: boolean,
 				products?: PaymentProduct[],
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ApplyEscrowLogisticsResponse> => {
 			const {
 				paymentId,
@@ -443,6 +455,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -517,7 +530,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				productType?: PaymentProductType,
 				shippingAddress?: SeparatedAddressInput,
 				promotionId?: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<PayInstantlyResponse> => {
 			const {
 				paymentId,
@@ -567,6 +581,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -583,7 +598,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				totalAmount?: number,
 				taxFreeAmount?: number,
 				currency?: Currency,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<PreRegisterPaymentResponse> => {
 			const {
 				paymentId,
@@ -605,6 +621,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -619,7 +636,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				paymentId: string,
 				items: RegisterStoreReceiptBodyItem[],
 				storeId?: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<RegisterStoreReceiptResponse> => {
 			const {
 				paymentId,
@@ -637,6 +655,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -651,7 +670,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 				paymentId: string,
 				storeId?: string,
 				webhookId?: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<ResendWebhookResponse> => {
 			const {
 				paymentId,
@@ -669,6 +689,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 					body: requestBody,
 				},
@@ -712,7 +733,8 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 			options: {
 				paymentId: string,
 				storeId?: string,
-			}
+			},
+			idempotencyKey?: string,
 		): Promise<CloseVirtualAccountResponse> => {
 			const {
 				paymentId,
@@ -730,6 +752,7 @@ export function PaymentClient(init: PortOneClientInit): PaymentClient {
 					headers: {
 						Authorization: `PortOne ${secret}`,
 						"User-Agent": USER_AGENT,
+						...idempotencyKeyHeader(idempotencyKey),
 					},
 				},
 			)
@@ -980,7 +1003,13 @@ export type PaymentClient = {
 			locale?: Locale,
 			/** PG사별 추가 파라미터 ("PG사별 연동 가이드" 참고) */
 			bypass?: object,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<PayWithBillingKeyResponse>
 	/**
 	 * 결제 취소
@@ -1050,7 +1079,13 @@ export type PaymentClient = {
 			 * 계좌 환불일 경우 입력합니다. 계좌 환불이 필요한 경우는 가상계좌 환불, 휴대폰 익월 환불 등이 있습니다.
 			 */
 			refundAccount?: CancelPaymentBodyRefundAccount,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<CancelPaymentResponse>
 	/**
 	 * 수동 매입
@@ -1069,7 +1104,13 @@ export type PaymentClient = {
 			 * 접근 권한이 있는 상점 아이디만 입력 가능하며, 미입력시 인증 정보의 상점 아이디를 사용합니다.
 			 */
 			storeId?: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<CapturePaymentResponse>
 	/**
 	 * 인증 결제 수동 승인
@@ -1126,7 +1167,13 @@ export type PaymentClient = {
 			 * 검증용 파라미터로, 결제 건 테스트 여부와 일치하지 않을 경우 오류가 반환됩니다. 값 전달을 권장합니다.
 			 */
 			isTest?: boolean,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ConfirmedPaymentSummary>
 	/**
 	 * 에스크로 구매 확정
@@ -1152,7 +1199,13 @@ export type PaymentClient = {
 			 * 네이버페이 전용 파라미터이며, 구분이 모호한 경우 고객사 관리자(true)로 입력합니다.
 			 */
 			fromStore?: boolean,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ConfirmEscrowResponse>
 	/**
 	 * 에스크로 배송 정보 등록
@@ -1185,7 +1238,13 @@ export type PaymentClient = {
 			sendEmail?: boolean,
 			/** 상품 정보 */
 			products?: PaymentProduct[],
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ApplyEscrowLogisticsResponse>
 	/**
 	 * 에스크로 배송 정보 수정
@@ -1300,7 +1359,13 @@ export type PaymentClient = {
 			shippingAddress?: SeparatedAddressInput,
 			/** 해당 결제에 적용할 프로모션 아이디 */
 			promotionId?: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<PayInstantlyResponse>
 	/**
 	 * 결제 정보 사전 등록
@@ -1331,7 +1396,13 @@ export type PaymentClient = {
 			taxFreeAmount?: number,
 			/** 통화 단위 */
 			currency?: Currency,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<PreRegisterPaymentResponse>
 	/**
 	 * 영수증 내 하위 상점 거래 등록
@@ -1350,7 +1421,13 @@ export type PaymentClient = {
 			items: RegisterStoreReceiptBodyItem[],
 			/** 상점 아이디 */
 			storeId?: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<RegisterStoreReceiptResponse>
 	/**
 	 * 웹훅 재발송
@@ -1375,7 +1452,13 @@ export type PaymentClient = {
 			 * 입력하지 않으면 결제 건의 가장 최근 웹훅 아이디가 기본 적용됩니다
 			 */
 			webhookId?: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<ResendWebhookResponse>
 	/**
 	 * 결제 시도 내역 조회
@@ -1409,7 +1492,13 @@ export type PaymentClient = {
 			 * 접근 권한이 있는 상점 아이디만 입력 가능하며, 미입력시 인증 정보의 상점 아이디를 사용합니다.
 			 */
 			storeId?: string,
-		}
+		},
+		/**
+		 * 멱등 키 (Idempotency-Key 헤더)
+		 *
+		 * RFC 8941에 따라 쌍따옴표로 감싸야 하며, 미리 감싸지 않은 경우 SDK가 자동으로 감쌉니다.
+		 */
+		idempotencyKey?: string,
 	) => Promise<CloseVirtualAccountResponse>
 	/**
 	 * 결제 단건 조회
