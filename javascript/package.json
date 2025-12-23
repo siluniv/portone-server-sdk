@@ -181,7 +181,7 @@
     "test:dev": "vitest --ui --typecheck",
     "test": "vitest run --typecheck",
     "prepublishOnly": "npm run build",
-    "publish": "jsr publish --allow-dirty"
+    "publish:jsr": "jsr publish --allow-dirty"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.5",
