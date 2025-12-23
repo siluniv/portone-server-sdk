@@ -1,7 +1,7 @@
 {
   "name": "@siluniv/portone-server-sdk",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fork of PortOne JavaScript SDK for server-side usage (adds Idempotency-Key support)",
   "keywords": [
     "PortOne",
