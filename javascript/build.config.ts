@@ -24,13 +24,24 @@ export default defineBuildConfig({
 	),
 	hooks: {
 		"mkdist:entry:build": async (_ctx, _entry, output) => {
-			const rev = await new Promise<string>((resolve, reject) =>
+			const pkgJson = JSON.parse(
+				await fs.readFile(new URL("./package.json", import.meta.url), {
+					encoding: "utf-8",
+				}),
+			) as { version?: string };
+
+			const rev = await new Promise<string>((resolve) =>
 				childProcess.exec(
 					"git describe --dirty --tags --match js-v* --first-parent",
-					(error, stdout) => (error ? reject(error) : resolve(stdout)),
+					(error, stdout) =>
+						resolve(
+							error
+								? `js-v${pkgJson.version ?? "0.0.0"}`
+								: stdout.trim() || `js-v${pkgJson.version ?? "0.0.0"}`,
+						),
 				),
 			);
-			const userAgent = `portone-server-sdk-js/${rev.trim()}`;
+			const userAgent = `portone-server-sdk-js/${rev}`;
 			await Promise.all(
 				output.writtenFiles.map(async (file) => {
 					const content = await fs.readFile(file, { encoding: "utf-8" });
