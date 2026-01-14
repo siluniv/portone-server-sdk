@@ -1,7 +1,7 @@
 {
-  "name": "@siluniv/portone-server-sdk",
+  "name": "@mediasphere/portone-server-sdk",
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.18.0-mediasphere.1",
   "description": "Fork of PortOne JavaScript SDK for server-side usage (adds Idempotency-Key support)",
   "keywords": [
     "PortOne",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/siluniv/portone-server-sdk.git",
     "directory": "javascript"
   },
-  "homepage": "https://github.com/siluniv/portone-server-sdk#readme",
+  "homepage": "https://github.com/siluniv/portone-server-sdk/tree/main/javascript#readme",
   "bugs": {
     "url": "https://github.com/siluniv/portone-server-sdk/issues"
   },
@@ -147,7 +147,9 @@
     }
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
+    "tag": "mediasphere"
   },
   "scripts": {
     "format": "biome format --write .",
@@ -155,6 +157,7 @@
     "test:dev": "vitest --ui --typecheck",
     "test": "vitest run --typecheck",
     "prepublishOnly": "npm run build",
+    "publish:npm": "npm publish --access public --tag mediasphere",
     "publish:jsr": "jsr publish --allow-dirty"
   },
   "devDependencies": {

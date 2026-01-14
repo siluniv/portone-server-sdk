@@ -1,0 +1,8 @@
+이 저장소에서 JavaScript 패키지(`javascript/`)를 npm에 배포할 때는 `javascript/RELEASING.md`를 최우선 기준으로 따른다.
+
+- 배포 대상 패키지: `@mediasphere/portone-server-sdk`
+- 버전 규칙: `0.18.0-mediasphere.N` (동일 버전 재배포 불가)
+- 배포 태그:
+  - `npm publish --tag mediasphere`
+  - 배포 후 `latest`를 같은 버전으로 이동: `npm dist-tag add @mediasphere/portone-server-sdk@<VERSION> latest`
+
